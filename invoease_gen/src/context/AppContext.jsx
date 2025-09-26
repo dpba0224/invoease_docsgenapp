@@ -47,12 +47,12 @@ export const AppContextProvider = ({children}) => {
 
     const [invoiceTitle, setInvoiceTitle] = useState("New Invoice");
     const [invoiceData, setInvoiceData] = useState(initialInvoiceData);
-    const [selectedTempate, setSelectedTemplate] = useState("template1");
+    const [selectedTemplate, setSelectedTemplate] = useState("template1");
 
     const contextValue = {
         invoiceTitle, setInvoiceTitle,
         invoiceData, setInvoiceData,
-        selectedTempate, setSelectedTemplate,
+        selectedTemplate, setSelectedTemplate,
         initialInvoiceData,
     }
 

@@ -28,32 +28,32 @@ export const assets = {
 
 export const templates = [
     {
-        id: "template 1",
+        id: "template1",
         label: "Template 1",
         image: assets.template01
     },
     {
-        id: "template 2",
+        id: "template2",
         label: "Template 2",
         image: assets.template02
     },
     {
-        id: "template 3",
+        id: "template3",
         label: "Template 3",
         image: assets.template03
     },
     {
-        id: "template 4",
+        id: "template4",
         label: "Template 4",
         image: assets.template04
     },
     {
-        id: "template 5",
+        id: "template5",
         label: "Template 5",
         image: assets.template05
     },
     {
-        id: "template 6",
+        id: "template6",
         label: "Template 6",
         image: assets.template06
     },

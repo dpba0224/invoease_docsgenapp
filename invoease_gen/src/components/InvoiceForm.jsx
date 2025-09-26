@@ -28,14 +28,11 @@ const InvoiceForm = () => {
     }
 
     const handleChange = (section, field, value) => {
-        setInvoiceData((previous) => ({
-            ...previous,
-            [section]: {
-                ...previous[section],
-                [field]: value
-            }
-        }))
-    }
+        setInvoiceData((prev) => ({
+        ...prev,
+        [section]: { ...prev[section], [field]: value },
+        }));
+    };
 
     const handleSameAsBilling = () => {
         setInvoiceData((prev) => ({
@@ -164,10 +161,9 @@ const InvoiceForm = () => {
                     <h5>Ship To:</h5>
                 
                     <div className="form-check">
-                        <input type="checkbox" className="form-check-input" id="sameAsBilling"/>
+                        <input type="checkbox" className="form-check-input" id="sameAsBilling" onChange={handleSameAsBilling}/>
 
-                        <label htmlFor="sameAsBilling" className="form-check-label" style={{paddingLeft: "10px"}}
-                            onChange={handleSameAsBilling}>
+                        <label htmlFor="sameAsBilling" className="form-check-label" style={{paddingLeft: "10px"}}>
                             Same as Billing Address
                         </label>
                     </div>
