@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { assets } from "../assets/assets.js";
 import { Trash2 } from "lucide-react";
 import { AppContext } from "../context/AppContext.jsx";
@@ -55,6 +55,45 @@ const InvoiceForm = () => {
         setInvoiceData((previous) => ({...previous, items}));
     }
 
+
+    const calculateTotals = () => {
+        const subtotal = invoiceData.items.reduce((sum, item) => sum + (item.total || 0), 0);
+        const taxRate = Number(invoiceData.tax || 0);
+        const taxAmount = (subtotal * taxRate) / 100;
+        const grandTotal = subtotal + taxAmount;
+        return {subtotal, taxAmount, grandTotal};
+    }
+
+    const {subtotal, taxAmount, grandTotal} = calculateTotals();
+
+    const handleUploadLogo = (e) => {
+        const file = e.target.files[0];
+
+        if(file){
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setInvoiceData((previous) => ({
+                    ...previous,
+                    logo: reader.result
+                }))
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    useEffect(() => {
+        if(!invoiceData.invoice.number){
+            const randomNumber = `IE-${Math.floor(100000 + Math.random() * 900000)}`;
+            setInvoiceData((previous)  => ({
+                ...previous,
+                invoice: {...previous.invoice, number: randomNumber},
+            }))
+        }
+    }, []);
+
+    
+
     return(
         <div className="invoiceform container py-4">
 
@@ -64,10 +103,11 @@ const InvoiceForm = () => {
 
                 <div className="d-flex align-items-center gap-3">
                     <label htmlFor="image" className="form-label">
-                        <img src={assets.upload_area} alt="upload" width={98} />
+                        <img src={invoiceData.logo ? invoiceData.logo : assets.upload_area} alt="upload" width={98} />
                     </label>
 
-                    <input type="file" name="logo" id="image" hidden className="form-control" accept="image/*" />
+                    <input type="file" name="logo" id="image" hidden 
+                        className="form-control" accept="image/*" onChange={handleUploadLogo}/>
                 </div>
             </div>
 
@@ -159,7 +199,7 @@ const InvoiceForm = () => {
                 <div className="row g-3">
                     <div className="col-md-4">
                         <label htmlFor="invoiceNumber" className="form-label">Invoice Number</label>
-                        <input type="text" disabled className="form-control" placeholder="Invoice Number" id="invoiceNumber"
+                        <input type="text" disabled className="form-control"  id="invoiceNumber"
                             value={invoiceData.invoice.number} onChange={(e) => handleChange("invoice", "number", e.target.value)}/>
                     </div>
 
@@ -253,7 +293,7 @@ const InvoiceForm = () => {
                     <div className="w-100 w-md-50">
                         <div className="d-flex justify-content-between">
                             <span>Subtotal</span>
-                            <span>Php {1000.00}</span>
+                            <span>Php {subtotal.toFixed(2)}</span>
                         </div>
 
                         <div className="d-flex justify-content-between align-items-center my-2">
@@ -264,11 +304,11 @@ const InvoiceForm = () => {
 
                         <div className="d-flex justify-content-between">
                             <span>Tax amount</span>
-                            <span>Php {1000.00}</span>
+                            <span>Php {taxAmount.toFixed(2)}</span>
                         </div>
                         <div className="d-flex justify-content-between fw-bold mt-2">
                             <span>Grand Total</span>
-                            <span>Php {1000.00}</span>
+                            <span>Php {grandTotal.toFixed(2)}</span>
                         </div>
                     </div>
                 </div>
@@ -280,9 +320,13 @@ const InvoiceForm = () => {
                 <h5>Notes:</h5>
 
                 <div className="w-100">
-                    <textarea name="notes" className="form-control" rows={3}></textarea>
+                    <textarea name="notes" className="form-control" rows={3}
+                        value={invoiceData.notes} onChange={(e) => setInvoiceData((previous) => ({...previous, notes: e.target.value}))}>
+                    </textarea>
                 </div>
             </div>
+
+            
         </div>
     );
 }
