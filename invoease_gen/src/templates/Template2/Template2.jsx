@@ -1,6 +1,6 @@
-import './Template1.css'
+import './Template2.css'
 
-const Template1 = ({data}) => {
+const Template2 = ({data}) => {
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('en-PH', {
             style: 'currency',
@@ -10,7 +10,7 @@ const Template1 = ({data}) => {
     };
 
     return(
-        <div className="template1 border rounded mx-auto my-4 px-sm-4 py-3 w-100">
+        <div className="template2 border rounded mx-auto my-4 px-sm-4 py-3 w-100">
             {/* Header section */}
             <div className="row mb-4">
                 <div className="col-md-6 mb-3 mb-md-0">
@@ -20,7 +20,7 @@ const Template1 = ({data}) => {
                         </div>
                     )}
 
-                    <h2 className="mb-1 company-title">{data.businessName}</h2>
+                    <h2 className="mb-1 company-title2">{data.businessName}</h2>
 
                     <p className="mb-1">{data.businessAddress}</p>
 
@@ -28,7 +28,7 @@ const Template1 = ({data}) => {
                 </div>
 
                 <div className="col-md-6 text-start text-md-end">
-                    <h1 className="mb-2 invoice-title">Invoice</h1>
+                    <h1 className="mb-2 invoice-title2">Invoice</h1>
 
                     <div className="d-flex flex-column flex-md-row justify-content-md-end gap-2 gap-md-4">
                         <div className="w-100 w-md-50 mb-3 mb-md-0">
@@ -49,15 +49,15 @@ const Template1 = ({data}) => {
             </div>
 
 
-            <hr className="my-3 orange-border" />
+            <hr className="my-3 red-border" />
 
 
             {/* Billing section */}
             <div className="row g-3 mb-4">
                 {data.shippingName && data.shippingContact && data.shippingAddress && (
                     <div className="col-md-6">
-                        <div className="p-3 rounded h-100 billing-box">
-                            <h3 className="mb-2 billing-title">Shipped To:</h3>
+                        <div className="p-3 rounded h-100 billing-box2">
+                            <h3 className="mb-2 billing-title2">Shipped To:</h3>
 
                             <p className="mb-1">
                                 <strong>{data.shippingName}</strong>
@@ -71,8 +71,8 @@ const Template1 = ({data}) => {
                 )}
 
                 <div className="col-md-6">
-                    <div className="p-3 rounded h-100 billing-box">
-                        <h3 className="mb-2 billing-title">Billed to:</h3>
+                    <div className="p-3 rounded h-100 billing-box2">
+                        <h3 className="mb-2 billing-title2">Billed to:</h3>
 
                         <p className="mb-1">
                             <strong>{data.billingName}</strong>
@@ -92,10 +92,10 @@ const Template1 = ({data}) => {
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                <th className='p-2 table-header'>Item No./Item Description</th>
-                                <th className='p-2 text-center table-header'>Qty.</th>
-                                <th className='p-2 text-end table-header'>Rate</th>
-                                <th className='p-2 text-end table-header'>Amount</th>
+                                <th className='p-2 table-header2'>Item No./Item Description</th>
+                                <th className='p-2 text-center table-header2'>Qty.</th>
+                                <th className='p-2 text-end table-header2'>Rate</th>
+                                <th className='p-2 text-end table-header2'>Amount</th>
                             </tr>
                         </thead>
 
@@ -117,7 +117,7 @@ const Template1 = ({data}) => {
             {/* Totals section */}
             <div className="mb-4">
                 <div className="d-flex justify-content-end">
-                    <div className="p-3 w-100 totals-box" style={{maxWidth : "300px"}}>
+                    <div className="p-3 w-100 totals-box2" style={{maxWidth : "300px"}}>
                         <div className="d-flex justify-content-between mb-2">
                             <span>Subtotal: </span>
                             <span> ₱ {data.subtotal.toFixed(2)}</span>
@@ -130,7 +130,7 @@ const Template1 = ({data}) => {
                             </div>
                         )}
 
-                        <div className="d-flex justify-content-between fw-bold total-highlight">
+                        <div className="d-flex justify-content-between fw-bold total-highlight2">
                             <span>Total :</span>
                             <span> ₱ {data.total.toFixed(2)}</span>
                         </div>
@@ -142,7 +142,7 @@ const Template1 = ({data}) => {
             {/* Bank account section */}
             {(data.accountName || data.accountNumber || data.accountCode) && (
                 <div className="mt-4">
-                <h3 className="mb-2 billing-title">Bank Account Details</h3>
+                <h3 className="mb-2 billing-title2">Bank Account Details</h3>
                 {data.accountName && (
                     <p className="mb-1">
                     <strong>Account Holder:</strong> {data.accountName}
@@ -166,7 +166,7 @@ const Template1 = ({data}) => {
             {/* Notes section */}
             {data.notes && (
                 <div className="mt-4">
-                    <h3 className="mb-2 billing-title">
+                    <h3 className="mb-2 billing-title2">
                         Remarks:
                     </h3>
                     <p className="mb-0">
@@ -178,4 +178,4 @@ const Template1 = ({data}) => {
     );
 }
 
-export default Template1;
+export default Template2;

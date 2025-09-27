@@ -1,11 +1,46 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { templates } from "../assets/assets.js";
 import { AppContext } from '../context/AppContext';
 import InvoicePreview from "../components/InvoicePreview.jsx";
+import { saveInvoice } from "../service/invoiceService.js";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const Preview = () => {
     const previewRef = useRef();
-    const {selectedTemplate, setSelectedTemplate, invoiceData} = useContext(AppContext);
+    const {selectedTemplate, setSelectedTemplate, invoiceData, baseURL} = useContext(AppContext);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSaveAndExit = async () => {
+        try{
+            setLoading(true);
+
+            // Create thumbnail url (pending)
+
+            const payload = {
+                ...invoiceData,
+                template: selectedTemplate,
+            }
+
+            const response = await saveInvoice(baseURL, payload);
+            if(response.status === 200){
+                toast.success("The invoice has been saved successfully!");
+                navigate("/dashboard");
+            }
+            else{
+                toast.error("Something went wrong.")
+            }
+        }
+        catch(error){   
+            console.error(error);
+            toast.error(error.message);
+        }
+        finally{
+            setLoading(false);
+        }
+    }
 
     return(
         <div className="previewpage container-fluid d-flex flex-column p-3 min-vh-100">
@@ -28,7 +63,11 @@ const Preview = () => {
 
                 {/* Action buttons list */}
                 <div className="d-flex flex-wrap justify-content-center gap-2">
-                    <button className="btn btn-primary d-flex align-items-center justify-content-center">Save and Exit</button>
+                    <button className="btn btn-primary d-flex align-items-center justify-content-center" 
+                        onClick={handleSaveAndExit} disabled={loading}>
+                        {loading && <Loader2 className="me-2 spin-animation" size={18}/>}
+                        {loading ? "Saving..." : "Save And Exit"}
+                    </button>
                     <button className="btn btn-success d-flex align-items-center justify-content-center">Download to PDF</button>
                     <button className="btn btn-info">Send to Email</button>
                     <button className="btn btn-danger">Delete</button>

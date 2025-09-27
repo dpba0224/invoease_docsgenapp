@@ -1,0 +1,18 @@
+.template3-wrapper {
+    background-color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.notes-section {
+    background-color: #f0fdf4;
+    border-top: 3px solid #22c55e;
+}
+
+.template3 .company-title {
+    color: #198754;
+}
+
+.template3 .template3-table-header {
+    background-color: #198754 !important;
+    color: white !important;
+}
