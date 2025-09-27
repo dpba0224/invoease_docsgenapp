@@ -54,7 +54,7 @@ export const formatDate = (dateStr) => {
   if (!dateStr) return "N/A";
 
   const date = new Date(dateStr);
-  return date.toLocaleDateString("en-GB", {
+  return date.toLocaleDateString("en-PH", {
     day: "2-digit",
     month: "short",
     year: "numeric",
