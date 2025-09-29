@@ -45,17 +45,14 @@ public class InvoiceController {
     }
 
     @PostMapping("/sendinvoice")
-    public ResponseEntity<?> sendInvoice(
-        @RequestPart("file") MultipartFile file,
-        @RequestPart("email") String customerEmail
-    ){
-        try{
+    public ResponseEntity<?> sendInvoice(@RequestPart("file") MultipartFile file,
+                                         @RequestPart("email") String customerEmail) {
+        try {
             emailService.sendInvoiceEmail(customerEmail, file);
-            return ResponseEntity.ok().body("The invoice was sent successfully!");
+            return ResponseEntity.ok().body("Invoice sent successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to send invoice.");
         }
-        catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to send invoice.");
-        }
-
     }
 }

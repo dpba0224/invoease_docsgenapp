@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { templates } from "../assets/assets.js";
 import { AppContext } from '../context/AppContext';
 import InvoicePreview from "../components/InvoicePreview.jsx";
@@ -9,9 +9,12 @@ import { Loader2 } from "lucide-react";
 import { uploadInvoiceThumbnail } from "../service/cloudinaryService";
 import html2canvas from "html2canvas";
 import { generatePdfFromElement } from "../util/pdfUtils.js";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 const Preview = () => {
     const previewRef = useRef();
+    const {user} = useUser();
+    const { getToken } = useAuth();
     const {selectedTemplate, setSelectedTemplate, invoiceData, baseURL} = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [downloading, setDownloading] = useState(false);
@@ -19,6 +22,13 @@ const Preview = () => {
     const [customerEmail, setCustomerEmail] = useState("");
     const [emailing, setEmailing] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!invoiceData || !invoiceData.items?.length) {
+          toast.error("Invoice data is missing.");
+          navigate("/");
+        }
+      }, [invoiceData, navigate]);
 
     const handleSaveAndExit = async () => {
         try{
@@ -36,17 +46,19 @@ const Preview = () => {
 
             const payload = {
                 ...invoiceData,
+                clerkId: user.id,
                 thumbnailUrl,
                 template: selectedTemplate,
             }
 
-            const response = await saveInvoice(baseURL, payload);
+            const token = await getToken();
+            const response = await saveInvoice(baseURL, payload, token);
             if(response.status === 200){
                 toast.success("The invoice has been saved successfully!");
                 navigate("/dashboard");
             }
             else{
-                toast.error("Something went wrong.")
+                throw new Error("Something went wrong.")
             }
         }
         catch(error){   
@@ -59,8 +71,11 @@ const Preview = () => {
     }
 
     const handleDelete = async () => {
+        if (!invoiceData.id) return toast.error("No invoice ID found.");
+
         try{
-            const response = await deleteInvoice(baseURL, invoiceData.id);
+            const token = await getToken();
+            const response = await deleteInvoice(baseURL, invoiceData.id, token);
             
             if(response.status === 204){
                 toast.success("Invoice deleted successfully!");
@@ -72,6 +87,7 @@ const Preview = () => {
         }
         catch(error){
             toast.error("Failed to delete the invoice", error.message);
+            console.error(error);
         }
     }
 
@@ -86,6 +102,7 @@ const Preview = () => {
         }
         catch(error){
             toast.error("Failed to generate invoice", error.message);
+            console.error;
         }
         finally{
             setDownloading(false);
@@ -102,10 +119,11 @@ const Preview = () => {
             const pdfBlob = await generatePdfFromElement(previewRef.current, `invoice_${Date.now()}.pdf`, true);
             
             const formData = new FormData();
-            formData.append("file", pdfBlob);
+            formData.append("file", pdfBlob, `invoice_${Date.now()}.pdf`);
             formData.append("email", customerEmail);
 
-            const response = await sendInvoice(baseURL, formData);
+            const token = await getToken();
+            const response = await sendInvoice(baseURL, token, formData);
 
             if(response.status === 200){
                 toast.success("E-mail is sent successfully!");
@@ -117,7 +135,7 @@ const Preview = () => {
             }
         }
         catch(error){
-            toast.error("Failed to send the e-mail", error.message);
+            toast.error(error.message);
         }
         finally{
             setEmailing(false);

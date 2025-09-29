@@ -1,13 +1,26 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Logo from "./Logo";
 import { SignedIn, SignedOut, useClerk, UserButton } from "@clerk/clerk-react";
+import { useContext } from "react";
+import { AppContext, initialInvoiceData } from "../context/AppContext";
 
 const Menubar = () => {
 
     const {openSignIn} = useClerk();
+    const {setInvoiceData, setSelectedTemplate, setInvoiceTitle} = useContext(AppContext);
+    const navigate = useNavigate();
+
 
     const openLogin = () => {
         openSignIn({});
+    }
+
+    const handleGenerateClick = () => {
+        setInvoiceData(initialInvoiceData);
+        setSelectedTemplate("template1");
+        setInvoiceTitle("New Invoice");
+
+        navigate("/generate");
     }
 
     return(
@@ -48,7 +61,7 @@ const Menubar = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <button className="nav-link fw-medium">
+                                <button className="nav-link fw-medium" onClick={handleGenerateClick}>
                                     Generate
                                 </button>
                             </li>

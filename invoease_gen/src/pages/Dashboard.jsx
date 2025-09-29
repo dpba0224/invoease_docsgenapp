@@ -5,16 +5,19 @@ import toast from "react-hot-toast";
 import { Plus } from "lucide-react";
 import { formatDate } from "../util/formatInvoiceData.js";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 const Dashboard = () => {
     const [invoices, setInvoices] = useState([]);
     const { baseURL, setInvoiceData, setSelectedTemplate, setInvoiceTitle } = useContext(AppContext);
     const navigate = useNavigate();
+    const {getToken} = useAuth();
 
     useEffect(() => {
         const fetchInvoices = async () => {
             try{
-                const response =  await getAllInvoices(baseURL);
+                const token = await getToken();
+                const response =  await getAllInvoices(baseURL, token);
                 setInvoices(response.data);
             }
             catch(error){
@@ -70,7 +73,7 @@ const Dashboard = () => {
                             <div className="card-body">
                                 <h6 className="card-title mb-1">{invoice.title}</h6>
                                 <small className="text-muted">
-                                    Last Updated: {formatDate(invoice.lastUpdatedAt)}
+                                    Last Updated: {formatDate(invoice.createdAt)}
                                 </small>
                             </div>
                         </div>

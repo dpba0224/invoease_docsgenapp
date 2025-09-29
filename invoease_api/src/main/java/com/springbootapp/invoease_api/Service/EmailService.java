@@ -16,23 +16,22 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class EmailService {
 
-    //Dependency Injections
     private final JavaMailSender mailSender;
 
     @Value("${spring.mail.properties.mail.smtp.from}")
-    private String referenceEmail;
+    private String fromEmail;
 
-    public void sendInvoiceEmail(String toEmail, MultipartFile file)
-        throws MessagingException, IOException {
+    public void sendInvoiceEmail(String toEmail, MultipartFile file) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setFrom(referenceEmail);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(fromEmail);
         helper.setTo(toEmail);
         helper.setSubject("Your Invoice");
-        helper.setText("Hi Customer! \n\nPlease see the attached invoice in this e-mail for your reference.\n\nThank you so much and stay safe!");
-        String fileName = "invoice_" + System.currentTimeMillis() + ".pdf";
-        helper.addAttachment(fileName, new ByteArrayResource(file.getBytes()));
+        helper.setText("Dear Customer,\n\nPlease find attached your invoice.\n\nThank you!");
+
+        helper.addAttachment(file.getOriginalFilename(), new ByteArrayResource(file.getBytes()));
+
         mailSender.send(message);
     }
 }
