@@ -28,7 +28,7 @@ const Menubar = () => {
             <div className="container py-2">
                 <Link className="navbar-brand d-flex align-items-center" to="/">
                     <Logo />
-                    <span className="fw-bolder fs-4-mx-3" style={{ letterSpacing: '-0.5px', color: '#0D6EFDB2' }}>
+                    <span className="fw-bolder fs-1-mx-3" style={{ letterSpacing: '0.5px', color: '#233e47ff', marginLeft: '15px' }}>
                         InvoEase 
                     </span>
                 </Link>

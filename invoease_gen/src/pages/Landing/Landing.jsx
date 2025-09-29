@@ -1,8 +1,30 @@
 import './Landing.css';
 import {assets} from "../../assets/assets.js";
 import Logo from "../../components/Logo.jsx"
+import LogoNegative from "../../components/LogoNegative.jsx"
+import { SignedIn, SignedOut, useClerk, UserButton } from "@clerk/clerk-react";
+import { AppContext, initialInvoiceData } from "../../context/AppContext";
+import {useNavigate} from "react-router-dom";
+import { useContext } from "react";
 
 const Landing = () => {
+
+    const {openSignIn} = useClerk();
+    const {setInvoiceData, setSelectedTemplate, setInvoiceTitle} = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const openLogin = () => {
+        openSignIn({});
+    }
+
+    const handleGenerateClick = () => {
+        setInvoiceData(initialInvoiceData);
+        setSelectedTemplate("template1");
+        setInvoiceTitle("New Invoice");
+
+        navigate("/generate");
+    }
+
     return(
         <>
             <header id="hero" className="hero-section text-white text-center">
@@ -18,9 +40,16 @@ const Landing = () => {
                             </p>
                             <p>
                                 {/* Primary call to action */}
-                                <button className="btn btn-lg btn-warning fw-bold rounded-pill my-2 mx-1 px-5 py-3">
-                                    Try Now!
-                                </button>
+                                <SignedIn>
+                                    <button className="btn btn-lg btn-warning fw-bold rounded-pill my-2 mx-1 px-5 py-3" onClick={handleGenerateClick}>
+                                        Try Now!
+                                    </button>
+                                </SignedIn>
+                                <SignedOut>
+                                    <button className="btn btn-lg btn-warning fw-bold rounded-pill my-2 mx-1 px-5 py-3" onClick={openLogin}>
+                                        Try Now!
+                                    </button>
+                                </SignedOut>
                                 {/* Secondary call to action */}
                                 <a href="#how-it-works" className="btn btn-lg btn-outline-light rounded-pill my-2 mx-1 px-5 py-3">
                                     More Info
@@ -220,15 +249,23 @@ const Landing = () => {
                         Join thousands of businesses and organizations who trust <u><b>InvoEase</b></u>.
                         Start creating your professional invoices today! It is fast, efficient, and reliable!
                     </p>
-                    <button className="btn btn-lg btn-warning fw-bold rounded-pill px-5 py-3">
-                        Generate your invoice now! 
-                    </button>
+
+                     <SignedIn>
+                        <button className="btn btn-lg btn-warning fw-bold rounded-pill my-2 px-5 py-3" onClick={handleGenerateClick}>
+                            Generate your invoice now! 
+                        </button>
+                    </SignedIn>
+                    <SignedOut>
+                        <button className="btn btn-lg btn-warning fw-bold rounded-pill my-2 px-5 py-3" onClick={openLogin}>
+                            Generate your invoice now! 
+                        </button>
+                    </SignedOut>
                 </div>
             </section>
 
             <footer className="py-5 bg-dark text-white-50">
                 <div className="container text-center">
-                    <Logo />
+                    <LogoNegative />
                     <p className="text-white fw-bold mt-2">InvoEase</p>
                     <p className="mb-0">
                         &copy; {new Date().getFullYear()} InvoEase. All Rights Reserved.

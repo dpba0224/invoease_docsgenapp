@@ -100,7 +100,7 @@ const InvoiceForm = () => {
 
                 <div className="d-flex align-items-center gap-3">
                     <label htmlFor="image" className="form-label">
-                        <img src={invoiceData.logo ? invoiceData.logo : assets.upload_area} alt="upload" width={98} />
+                        <img src={invoiceData.logo ? invoiceData.logo : assets.upload_area} alt="upload" width={120} style={{ cursor: "pointer" }}/>
                     </label>
 
                     <input type="file" name="logo" id="image" hidden 

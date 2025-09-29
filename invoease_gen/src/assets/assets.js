@@ -5,6 +5,7 @@ import template04 from './template04.png';
 import template05 from './template05.png';
 import template06 from './template06.png';
 import logo from './logo.png';
+import logo_negative from './logo_negative.png';
 import upload_area from './upload_area.png';
 import landing01 from './landing01.png';
 import landing02 from './landing02.png';
@@ -19,6 +20,7 @@ export const assets = {
     template05,
     template06,
     logo,
+    logo_negative,
     landing01,
     landing02,
     landing03,

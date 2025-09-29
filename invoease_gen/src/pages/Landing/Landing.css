@@ -1,12 +1,14 @@
 /* Hero section styling */
 .hero-section {
     /* Gradient overlay for better text visibility on background image */
-    background: linear-gradient(rgba(44, 44, 44, 0.90), rgba(44, 44, 44, 0.70)),
-        url('[https://placehold.co/1920x1080/495057/dee2e6?text=Modern+Digital+Workspace](https://placehold.co/1920x1080/495057/dee2e6?text=Modern+Digital+Workspace)') no-repeat center center;
+    background: linear-gradient(45deg, #0f2027, #203a43, #2c5364),
+            url('[https://placehold.co/1920x1080/495057/dee2e6?text=Modern+Digital+Workspace](https://placehold.co/1920x1080/495057/dee2e6?text=Modern+Digital+Workspace)') no-repeat center center;
     background-size: cover;
     color: #ffffff;
     /* Ensure text is white */
 }
+
+
 
 .hero-section h1 {
     font-weight: 900;
@@ -15,7 +17,7 @@
 
 /* Navbar brand styling */
 .navbar-brand .fw-bolder {
-    color: #343a40;
+    color: #2a2f34;
     /* Darker color for brand name for better contrast on white navbar */
 }
 
