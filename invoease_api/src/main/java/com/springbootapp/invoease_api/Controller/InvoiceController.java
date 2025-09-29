@@ -8,16 +8,16 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/invoices")
-@CrossOrigin("*")
 public class InvoiceController {
 
     // Dependency Injections
@@ -30,14 +30,18 @@ public class InvoiceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Invoice>> getAllInvoices() {
-        return ResponseEntity.ok(invoiceService.fetchInvoices());
+    public ResponseEntity<List<Invoice>> getAllInvoices(Authentication authentication) {
+        return ResponseEntity.ok(invoiceService.fetchInvoices(authentication.getName()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInvoice(@PathVariable String id) {
-        invoiceService.deleteInvoice(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteInvoice(@PathVariable String id, Authentication authentication) {
+        if(authentication.getName() != null){
+            invoiceService.deleteInvoice(id, authentication.getName());
+            return ResponseEntity.noContent().build();
+        }
+
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission to access this resource.");
     }
 
     @PostMapping("/sendinvoice")
